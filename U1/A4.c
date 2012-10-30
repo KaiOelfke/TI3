@@ -111,8 +111,10 @@ int main(int argc, const char * argv[])
         else 
         {
             perror("Fehler. Datei hat falsches Format.");
+            fclose(f);
             return 1;
         }
+        fclose(f);
         return 0;
     }
     else
