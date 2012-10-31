@@ -85,7 +85,7 @@
 
     - Kompliziert zu implementieren
     - Wenn zu viele Interrupts auftreten, werden immer nur die aktuellsten bearbeitet und
-    die ersten Interrupts haben eine große Verzögerung (FIFO)
+    die ersten Interrupts haben eine große Verzögerung (FIFO)-
 */
 
 #include <stdio.h>
@@ -111,10 +111,10 @@ int main(int argc, const char * argv[])
         else 
         {
             perror("Fehler. Datei hat falsches Format.");
-            fclose(f);
+            fclose(testFile);
             return 1;
         }
-        fclose(f);
+        fclose(testFile);
         return 0;
     }
     else
