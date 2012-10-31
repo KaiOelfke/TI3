@@ -95,7 +95,7 @@
 
     - Geringe Verzögerungen, weil die ISR nur ganz kurz nicht 
     unterbrochen werden kann
-    - Der aktuellste Interrupt wird zuerst beendet (FIFO)
+    - Der aktuellste Interrupt wird zuerst beendet (LIFO)
     - Interrupts gehen seltener verloren (nur wenn z.B. im blockierten 
     Teil der ISR zwei Mal
     eine Eingabe per Tastatur erfolgt, anstatt der gesamten ISR)
@@ -105,7 +105,8 @@
     - Kompliziert zu implementieren
     - Wenn zu viele Interrupts auftreten, werden immer nur die 
     aktuellsten bearbeitet und die ersten Interrupts haben eine 
-    große Verzögerung (FIFO)
+    große Verzögerung (LIFO)
+
 */
 
 #include <stdio.h>
