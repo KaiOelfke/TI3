@@ -4,23 +4,21 @@
 #define BUFFER_SIZE (64 * 1024)
 int copy(char *source, char *target)
 {
-	int fileExist = open(target, O_RDONLY);
-	if (fileExist > 0){
-		perror("Die Datei ist schon exitiert");
-		return 1;		
-	}
-	int fdOriginal = open(source, O_RDONLY);
-	if (fdOriginal < 0)
-	{
-		perror("Konnte Quelle nicht oeffnen:");
-		return 1;
-	}
+	
 	int fdCopy = open(target, O_WRONLY | O_CREAT | O_EXCL | O_EXLOCK, S_IRWXU | S_IRGRP | S_IWGRP | S_IROTH);
 	if (fdCopy < 0)
 	{
         perror( "Konnte Zieldatei nicht erstellen:");
 		return 1;
 	}
+
+	int fdOriginal = open(source, O_RDONLY);
+	if (fdOriginal < 0)
+	{
+		perror("Konnte Quelle nicht oeffnen:");
+		return 1;
+	}
+
 	char buffer[BUFFER_SIZE];
 	for (;;) 
 	{
