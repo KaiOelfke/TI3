@@ -11,13 +11,13 @@ int copy(char *source, char *target)
 	if (fdOriginal < 0)
 	{
 		perror("Konnte Quelle nicht oeffnen:");
-		return 1;
+		return EXIT_FAILURE;
 	}
 	int fdCopy = open(target, O_WRONLY | O_CREAT | O_EXCL | O_EXLOCK, S_IRWXU | S_IRGRP | S_IWGRP | S_IROTH);
 	if (fdCopy < 0)
 	{
         perror( "Konnte Zieldatei nicht erstellen:");
-		return 1;
+		return EXIT_FAILURE;
 	}
 	char buffer[BUFFER_SIZE];
 	for (;;) 
@@ -27,7 +27,7 @@ int copy(char *source, char *target)
 		if (bytesRead == -1)
 		{
 			perror("Fehler beim Lesen:");
-			return 1;
+			return EXIT_FAILURE;
 		}
 		char *writePostion = buffer;
 		while (bytesRead > 0)
@@ -36,7 +36,7 @@ int copy(char *source, char *target)
 			if (bytesWritten == -1)
 			{
 				perror("Fehler beim Schreiben");
-				return 1;
+				return EXIT_FAILURE;
 			}
 			bytesRead -= bytesWritten;
 			writePostion += bytesWritten;
@@ -47,9 +47,9 @@ int copy(char *source, char *target)
  	if (closeOriginal == -1 || closeCopy == -1)
  	{
  		perror("Fehler beim Schließen");
- 		return 1;
+ 		return EXIT_FAILURE;
  	}
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 int main(int argc, char *argv[])
@@ -57,8 +57,9 @@ int main(int argc, char *argv[])
 	if (argc != 3)
 	{
 		perror("Bitte Programm mit: Quelldatei Zieldatei aufrufen\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
-	copy(argv[1],argv[2]);
-	return 0;
+	int result = copy(argv[1],argv[2]);
+	if (result == -1) return EXIT_FAILURE;
+	return EXIT_SUCCESS;
 }
