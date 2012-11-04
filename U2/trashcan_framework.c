@@ -94,7 +94,6 @@ int put_file(char *foldername, char *filename)
 	if (path == NULL)
 		return -5;
 	int copyError = copy(filename,path);
-	free(path);
 	if (copyError == -1)
 		return -1;
 	else if (copyError == -2) 
@@ -102,6 +101,7 @@ int put_file(char *foldername, char *filename)
 	else if (copyError == -4)
 		return -4;
 	int removeError = unlink(filename);
+	free(path);
 	if (removeError != 0)
 		return -3;
 	return 0;
@@ -114,7 +114,6 @@ int get_file(char *foldername, char *filename)
 	char *path = createPath(foldername,filename);
 	if (path == NULL)
 		return -5;
-	free(path);
 	int copyError = copy(path, filename);
 	if (copyError == -1)
 		return -1;
@@ -123,6 +122,7 @@ int get_file(char *foldername, char *filename)
 	else if (copyError == -4)
 		return -4;
 	int removeError = unlink(path);
+	free(path);
 	if (removeError != 0)
 		return -3;
 	return 0;
