@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <sys/stat.h>
-#include <errno.h>
+#include <stdlib.h>
 #define BUFFER_SIZE (64 * 1024)
 int copy(char *source, char *target)
 {
