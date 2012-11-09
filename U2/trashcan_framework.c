@@ -1,3 +1,96 @@
+/*
+	Aufgabe 1: Protection Rings
+
+	Das Konzept der Protection Rings dient der Computersicherheit.
+	Jeder Ring kann dabei nur auf seinen eigenen Bereich und den Bereich
+	höherere Ringe zugreifen. Wenn also ein Programm im Ring 3 auf eine
+	Ressource im Ring 0 zugreifen möchte, kann es dies nur mit einer
+	definierten Schnittstelle und nicht direkt. Deswegen befindet sich 
+	der Kernel auch immer im Ring 0 und die Anwendungen im Ring 3, damit
+	Anwendungen nicht einfach Kernelfunktionen benutzen können um Schaden
+	anzurichten. Heutzutage wird meistens nur der Ring 0 für den Kernel
+	und Betriebssystemfunktionen genutzt und für andere Prozesse und
+	Anwendungen der Ring 3. Protection Rings sind also eine Abstraktion
+	für bessere Systemsicherheit und Stabilität.
+
+	Aufgabe 2:
+
+	Ein Microkernel beschränkt sich auf grundlegende Speicherverwaltung
+	und Kommunikation zwischen Prozessen. 
+
+	Ja, aber der Kernel verwaltet auch die Ausführung der Prozesse 
+	(Scheduling). Prinzipiell beschränkt sich der Microkernel sonst,
+	aber auf diese Funktionen.
+
+	Im Kernelmodus muss das Betriebssystem darauf achten, dass die 
+	Speicherbereiche verschiedener Prozesse voneinander isoliert sind. 
+
+	Nein, weil der Kernel im Ring 0 ist und auf alles zugreifen darf. 
+	Das Betriebssystem muss die Speicherbereiche verwalten können und 
+	da im Kernelmodus auch keine Anwendung ausgeführt wird, kann keine
+	Anwendung Schaden anrichten mit dem Zugriff auf Daten eines anderen
+	Programms. Im Usermode muss das Betriebssystem dagegen die Speicher-
+	bereiche isolieren, weil sonst ein Programm A ein anderes Programm B
+	beschädigen könnte.
+
+	Wenn Interrupt Service Routinen nebenläufig abgearbeitet werden, muss
+	das Betriebssystem darauf achten, dass der Prozessor beim Timer-
+	Interrupt nicht in den Benutzermodus wechselt. 
+
+	Da z.B. Hardware ISR oft Ring 0 Funktionen benötigen, darf bei einem Timer
+	Interrupt nicht einfach in den Benutzermodus gewechselt werden. Weil 
+	dann z.B. ein Interrupt für die Tastatureingabe nicht fertig bearbeitet
+	werden kann, wenn der Tastaturzugriff nur im Kernelmode möglich ist.
+
+	Bei Microkerneln kommt es häufiger zu einem Kontextwechsel als bei
+	monolithischen Kerneln
+
+	Ja, weil bei einem monolithischen Kernel muss einmal der Kernelmode
+	gestartet werden, die gewünschte Funktion ausgeführt werden und
+	zurück gewechselt werden. Beim Microkernel dagegen wird in den Kernel
+	mode gewechselt, dann ein Programm im Usermode für die Funktion gestartet,
+	für das Ergebnis wird wieder in den Kernelmode gewechselt und dann wird
+	vom Kernel das Ergebnis wieder zurück zu dem aufrufenden Programm über
+	mittelt und deswegen wieder in den Usermode gewechselt.
+
+	Aufgabe 3: System Calls
+
+	Monolithischer Kernel
+	1. Funktionsaufrufe werden eingefügt:
+		- Programm muss immer in Ring 0 ausgeführt werden für Hardwarezugriff
+		- keine Sicherheitsmechanismen
+		- Funktionsadresse wird einfach eingefügt beim Kompilieren
+		- Wird als normale Funktion ausgeführt, die sich nicht unterscheidet vom restl.
+		Programm
+		- Es gibt also keine Kontextwechsel
+		- Monolithischen Kernel
+	2. Supervisorcall:
+		- Spezialereignis wie Interrupt, Exception, etc. wird ausgelöst durch Befehl
+		- Eine Tabelle listet ISR auf und ISR wird im Kernelmode ausgeführt
+		- Parameter durch Compiler eingfügt oder zwischengeschaltete Funktionen
+		- Rücksprung zum Programm
+		- nur Modewechsel, kein Prozesswechsel
+	Microkernel:
+	3. Aufruf von Systemmodul:
+		- Programm erzeugt Ereignis (Usermode)
+		- Mikrokernel reagiert auf Ereignis (Kernelmode)
+		- Mikrokernel wechselt zum Systemmodulprozess (Prozesswechsel)
+		- Systemmodul wird ausgeführt (Usermode)
+		- Systemmodul terminiert (Usermode -> Kernelmode, Prozesswechsel)
+		- Mikrokernel reagiert und wechselt zurück zum aufrufenden Programm 
+		(Kernelmode -> Usermode, Prozesswechsel Fortsetzung)
+	4. Dispatching
+		- Programm erzeugt Ereignis (Usermode)
+		- Microkernel nimmt dies zu Kenntnis (Kernelmode) 
+		- Microkernel initialisiert Auftrag (Kernelmode)
+		- Systemmodul akzeptiert Auftrag (Usermode)
+		- Systemmodul alarmiert Kernel bei Fertigstellung (Usermode)
+		- Kernel nimmt dies zu Kenntnis (Kernelmode)
+		- Kernel benachrichtigt Programm (Kernelmode)
+		- Programm nimmt Ergebnis entgegen (Usermode)
+
+
+*/
 /* trashcan.c */
 
 #include <unistd.h>
