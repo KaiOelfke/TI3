@@ -40,7 +40,7 @@ void initialize()
 		b_initialized = 1;
 		//TODO INITIALISIERUNG	
 		head = (memoryBlock *) memory;
-		head->data = memory + memoryBlockHeaderSize;
+		head->data = (void *)memory + memoryBlockHeaderSize;
 		head->dataLength = memoryBlockHeaderSize;
 		head->state = allocated;
 		head->nextBlock = NULL;
@@ -48,9 +48,8 @@ void initialize()
 		head->nextBlock = new;
 		new->dataLength = memorySize - head->dataLength;
 		new->state = not_allocated;
-		new->data = new + memoryBlockHeaderSize;
+		new->data = (void *) new + memoryBlockHeaderSize;
 		new->nextBlock = NULL;
-		printf("\nok47\n");
 	}
 }
 
@@ -74,12 +73,10 @@ int get_free_space()
 //Falls dies nicht gelingt wird ein NULL (0) Pointer zurueckgeliefert
 void* my_malloc(int byteCount)
 {
-	printf("\nok73\n");
 	if(!b_initialized)
 	{
 		initialize();
 	}
-	printf("\nok78\n");
 	//Wenn der insgesamt verfuegbare Speicherplatz kleiner ist
 	//als der angeforderte, koennen wir gleich aufhoeren!
 	if(byteCount > get_free_space())
@@ -89,7 +86,6 @@ void* my_malloc(int byteCount)
 	//TODO
 	//SUCHE NACH EINEM GEEIGNETEN FREIEN SPEICHERBLOCK, MIT MEHR ALS <byteCount>
 	//VIELEN BYTES
-	printf("\nok85\n");
 	memoryBlock *block = head;
 	while (block->nextBlock != NULL && (block->nextBlock->dataLength < byteCount + memoryBlockHeaderSize * 2 || block->nextBlock->state == allocated))
 		block = block->nextBlock;
@@ -100,7 +96,7 @@ void* my_malloc(int byteCount)
 		block->nextBlock->dataLength = memoryBlockHeaderSize + byteCount;
 		block->nextBlock->nextBlock = NULL;
 		block->nextBlock->state = allocated;
-		block->nextBlock->data = block->nextBlock + memoryBlockHeaderSize;
+		block->nextBlock->data = (void *) block->nextBlock + memoryBlockHeaderSize;
 		printf("\nok97\n");*/
 		printf("Fehler. Nicht ausreichend Speicher oder zu sehr fragmentiert.\n");
 		exit(EXIT_FAILURE);
@@ -109,9 +105,8 @@ void* my_malloc(int byteCount)
 	//UNTERTEILUNG DIESES BLOCKS, SO DASS NICHT UNNÖTIG VIEL SPEICHERPLATZ VERBRAUCHT WIRD
 	else 
 		splitBlock(block->nextBlock, byteCount);
-	printf("\nok102\n");		
 	//RÜCKGABE DES ZEIGERS AUF DEN ZU BENUTZENDEN SPEICHERBEREICH
-	return block->nextBlock->data;
+	return (void *) block->nextBlock->data;
 }
 
 //Sofern moeglich teilt die Funktion splitBlock einen Block in 2 Bloecke,
@@ -122,30 +117,21 @@ memoryBlock* splitBlock(memoryBlock* block, int byteCount)
 {
 	//TODO 
 	//IMPLEMENTIEREN //Vergleich eig unnoetig
-	printf("\nok122\n");		
 	if (byteCount + memoryBlockHeaderSize * 2 > block->dataLength)
 	{
 		printf("Fehler. Block kann nicht geteilt werden, weil zu klein.\n");
 		exit(EXIT_FAILURE);
 	}
-	// printf("%p\n",block);
-	// printf("%i\n",byteCount);
-	// printf("%p\n",(char*)block + (byteCount + memoryBlockHeaderSize));
-	// printf("%p\n",&(memory[memorySize - 1]));
 	memoryBlock *secondBlock = (memoryBlock *)((void *)block + memoryBlockHeaderSize + byteCount);
 	secondBlock->dataLength = 1;
-	// printf("\nok132\n");
 	secondBlock->dataLength = block->dataLength - byteCount - memoryBlockHeaderSize;
-	// printf("\nok134\n");		
-	secondBlock->data = secondBlock + memoryBlockHeaderSize;
+	secondBlock->data = (void *) secondBlock + memoryBlockHeaderSize;
 	secondBlock->state = not_allocated;
 	secondBlock->nextBlock = block->nextBlock;
-	// printf("\nok136\n");		
 	block->dataLength = byteCount + memoryBlockHeaderSize;
-	block->data = block + memoryBlockHeaderSize; //Eig ueberflussig.
+	block->data = (void *) block + memoryBlockHeaderSize; //Eig ueberflussig.
 	block->state = allocated;
 	block->nextBlock = secondBlock;
-	printf("\nok141\n");		
 	return block;
 }
 
@@ -161,9 +147,7 @@ void my_free(void* p)
 	//FREIGEBEN VON DEM ENTSPRECHENDEN SPEICHERBLOCK
 	//
 	memoryBlock *block = (memoryBlock *) ((void *)p - memoryBlockHeaderSize);
-	printf("%p\n",block);
 	block->state = not_allocated;
-	status();
 	//FREIE SPEICHERBLOECKE MITEINANDER VERSCHMELZEN
 	mergeFreeBlocks();
 }
@@ -174,25 +158,30 @@ void mergeFreeBlocks()
 	//TODO 
 	//IMPLEMENTIEREN
 	memoryBlock *block = head;
-	void *freePos = NULL;
+	memoryBlock *freePos = NULL;
 	int byteCount = 0;
-	while (block->nextBlock != NULL)
+	while (block != NULL)
 	{
 		//Beginn freier Bloecke
-		if (block->nextBlock->state == not_allocated && freePos == NULL)
-			freePos = block->nextBlock;
+		if (block->state == not_allocated && freePos == NULL)
+			freePos = block;
 		//Weiterer freier Block
-		if (block->nextBlock->state == not_allocated)
-			byteCount += block->nextBlock->dataLength;
+		if (block->state == not_allocated)
+			byteCount += block->dataLength;
 		//Ende freier Bloecke
-		else if (freePos != NULL)
+		if (freePos != NULL)
 		{
-			memoryBlock *new = (memoryBlock *) freePos;
-			new->state = not_allocated;
-			new->data = new + memoryBlockHeaderSize;
-			new->dataLength = byteCount;
-			freePos = NULL;
+			freePos->state = not_allocated;
+			freePos->data = (void *) freePos + memoryBlockHeaderSize;
+			freePos->dataLength = byteCount;
 			byteCount = 0;
+			if (block->state == allocated)
+			{
+				freePos->nextBlock = block;
+				freePos = NULL;
+			}
+			if (block->nextBlock == NULL)
+				freePos->nextBlock = NULL;
 		}
 		block = block->nextBlock;
 	}
