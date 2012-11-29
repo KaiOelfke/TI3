@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //Groesse des Speichers, den die Speicherverwaltung verwalten soll
-#define memorySize 102400
+#define memorySize 10306
 
 //Zustand von einem Speicherblock
 enum memBlockState{not_allocated=0, allocated=1};
@@ -174,14 +174,18 @@ void mergeFreeBlocks()
 			freePos->state = not_allocated;
 			freePos->data = (void *) freePos + memoryBlockHeaderSize;
 			freePos->dataLength = byteCount;
-			byteCount = 0;
+			
 			if (block->state == allocated)
 			{
 				freePos->nextBlock = block;
+				byteCount = 0;
 				freePos = NULL;
 			}
 			if (block->nextBlock == NULL)
+			{
+				byteCount = 0;
 				freePos->nextBlock = NULL;
+			}
 		}
 		block = block->nextBlock;
 	}
