@@ -35,6 +35,49 @@
 	zu den anderen Programmen. Genaugenommen ist also nur der Offset gleich. Manch
 	mal berechnet die MMU auch gar nichts und bekommt die Adresse auch direkt aus dem
 	TLB.
+
+	3. Aufgabe:
+
+	Wie oft können sie unter Linux malloc(1000000000) erfolgreich aufrufen,
+ 	wenn ihr System 1GB RAM und ein 2GB Swapfile hat.
+  	Recherchieren und Begründen Sie, bzw. probieren Sie es aus!
+	malloc() kann man quasi unendlich oft aufrufen bei Linux. Zitat dazu aus man:
+	By default, Linux follows an optimistic memory allocation strategy.
+	This means that when malloc() returns non-NULL there is no guarantee
+	that the memory really is available. In case it turns out that
+	the system is out of memory, one or more processes will be killed by the OOM killer.
+
+	Wenn man dagegen den Speicher auch nutzt mit memset wird bei Mac OS X,
+	das Programm so lange laufen bis der RAM und die HDD voll ist.
+	Das Swapfile wächst entsprechend. In dem Fall wären es also
+	n = (3GB - (andere Prozesse)) / 1000000000. 
+	Beim testen mit ssh auf andorra.imp.fu-berlin.de Server konnten
+	wir mit dem folgenden C Programm
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MEGABYTE 1024*1024
+
+int main(int argc, char *argv[])
+{
+        void *myblock = NULL;
+        int count = 0;
+        while(1)
+        {
+                myblock = (void *) malloc(MEGABYTE);
+                if (!myblock) break;
+                memset(myblock,1, MEGABYTE);
+                printf("Currently allocating %d MB\n",++count);
+        }
+        exit(0);
+}
+
+	um die 16 GB Speicher sammeln bzw. sämtlichen freien Speicher laut top.
+	Für die anderen User blieb also nicht viel übrig. Wenn man trotzdem
+	weitergemacht hat wurde man vom OOM killer "getötet". 
+
 */
 
 
