@@ -1,3 +1,43 @@
+/*
+	1. Aufgabe
+	Externe Fragmentierung ist, wenn viele freie getrennte Speicherbloecke
+	vorhanden sind und nicht nebeinander liegen. Wenn nun eine groﬂe
+	Speichermenge benoetigt wird werden auf der Festplatte die freien
+	Bloecke verlinkt wie bei einer LinkedList. Bei hoher Fragmentierung
+	wird also die Zugriffzeit auf solche stark verteilten Bloecke schlechter,
+	weil der Lesekopf der HDD immer springen muss wegen der Verlinkung. Mit
+	zunehmender Fragmentierung wird also das System langsamer. Deswegen 
+	sollte man unter Windows bei einer normalen HDD auch ab und an sein
+	System defragmentieren.
+	Verwendet man eine SSD, die ohnehin fuer maximale Lebensdauer eine
+	gute Verteilung anstrebt, ist keine Auswirkung vorhanden. Weil
+	die Zugriffszeit bei einer SSD durch die Verlinkung nicht wesentlich
+	schlechter wird.
+
+	Wenn beim RAM eine zu hohe externe Fragmentierung vorhanden ist, wird
+	versucht die Fragmentierung zu reduzieren, weil eine Verlinkung im RAM
+	zu ineffiziennt waere. Es gibt zwei Moeglichkeiten: Man lagert auf die
+	Festplatte aus (SWAP File) oder man verteilt blockierte Speicherbloecke
+	neu im RAM. Beide Varianten bewirken einen kurzfristigen Performanceverlust.
+	
+	2. Aufgabe
+
+	Bei Mac OS X bekommt man unterschiedliche Adressen und bei dem Linuxpool,
+	die gleichen Adressen. In beiden Faellen teilen sich die drei Instanzen
+	definitiv nicht den Speicher. Die Adresse die wir bekommen im Terminal
+	ist nur eine virtuelle Adresse und diese werden von der MMU umgerechnet in
+	physikalische Adressen. Die Instanzen haben nur dann einen gemeinsamen
+	Speicher, wenn Sie dieselbe physikalische Adresse benutzen wuerden. Das OS
+	verwaltet eine Tabelle mit Prozessen und deren Startadressen. Wenn nun ein 
+	Prozess etwas mit einer Adresse a machen moechte, schaut die MMU in die Tabelle
+	und ermittelt die Startadresse von dem Prozess und die relative Adresse a fuer
+	den Offset und ermittelt daraus die physikalische Adresse, die dann anders ist 
+	zu den anderen Programmen. Genaugenommen ist also nur der Offset gleich. Manch
+	mal berechnet die MMU auch gar nichts und bekommt die Adresse auch direkt aus dem
+	TLB.
+*/
+
+
 #include "mm.h"
 #include <stdio.h>
 #include <stdlib.h>
