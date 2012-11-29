@@ -214,7 +214,6 @@ void mergeFreeBlocks()
 			freePos->state = not_allocated;
 			freePos->data = (void *) freePos + memoryBlockHeaderSize;
 			freePos->dataLength = byteCount;
-			
 			if (block->state == allocated)
 			{
 				freePos->nextBlock = block;
