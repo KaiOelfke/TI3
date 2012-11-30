@@ -38,9 +38,9 @@
 
 	3. Aufgabe:
 
-	Wie oft können sie unter Linux malloc(1000000000) erfolgreich aufrufen,
+	Wie oft koennen sie unter Linux malloc(1000000000) erfolgreich aufrufen,
  	wenn ihr System 1GB RAM und ein 2GB Swapfile hat.
-  	Recherchieren und Begründen Sie, bzw. probieren Sie es aus!
+  	Recherchieren und Begruenden Sie, bzw. probieren Sie es aus!
 	malloc() kann man quasi unendlich oft aufrufen bei Linux. Zitat dazu aus man:
 	By default, Linux follows an optimistic memory allocation strategy.
 	This means that when malloc() returns non-NULL there is no guarantee
@@ -49,7 +49,7 @@
 
 	Wenn man dagegen den Speicher auch nutzt mit memset wird bei Mac OS X,
 	das Programm so lange laufen bis der RAM und die HDD voll ist.
-	Das Swapfile wächst entsprechend. In dem Fall wären es also
+	Das Swapfile waechst entsprechend. In dem Fall waeren es also
 	n = (3GB - (andere Prozesse)) / 1000000000. 
 	Beim testen mit ssh auf andorra.imp.fu-berlin.de Server konnten
 	wir mit dem folgenden C Programm
@@ -74,9 +74,9 @@ int main(int argc, char *argv[])
         exit(0);
 }
 
-	um die 16 GB Speicher sammeln bzw. sämtlichen freien Speicher laut top.
-	Für die anderen User blieb also nicht viel übrig. Wenn man trotzdem
-	weitergemacht hat wurde man vom OOM killer "getötet". 
+	um die 16 GB Speicher sammeln bzw. saemtlichen freien Speicher laut top.
+	Fuer die anderen User blieb also nicht viel uebrig. Wenn man trotzdem
+	weitergemacht hat wurde man vom OOM killer "getoetet". 
 
 */
 
@@ -185,7 +185,7 @@ void* my_malloc(int byteCount)
 		exit(EXIT_FAILURE);
 
 	}
-	//UNTERTEILUNG DIESES BLOCKS, SO DASS NICHT UNNÖTIG VIEL SPEICHERPLATZ VERBRAUCHT WIRD
+	//UNTERTEILUNG DIESES BLOCKS, SO DASS NICHT UNNOETIG VIEL SPEICHERPLATZ VERBRAUCHT WIRD
 	else 
 		splitBlock(block->nextBlock, byteCount);
 	//RÜCKGABE DES ZEIGERS AUF DEN ZU BENUTZENDEN SPEICHERBEREICH
@@ -273,7 +273,7 @@ void mergeFreeBlocks()
 	}
 }
 
-//Diese Funktion gibt eine Uebersicht ueber die vorhandenen Speicherblöcke aus
+//Diese Funktion gibt eine Uebersicht ueber die vorhandenen Speicherbloecke aus
 void status()
 {
 	if(!b_initialized)

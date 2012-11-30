@@ -1,5 +1,36 @@
 /*
 
+  1. Aufgabe
+
+  Bei Linux wird aktuell ein Completely Fair Scheduler verwendent. Beim CFS 
+  soll die Rechenzeit fair auf alle Prozesse aufgeteilt werden. Dafuer
+  wird die Wartezeit jedes Prozesses gespeichert und der Prozess mit der
+  hoechsten Wartezeit ist der naechste Prozess. Als Datenstruktur wird
+  ein Rot-Schwarz-Baum verwendent mit Sortierung nach der Wartezeit. Je nach
+  Sortierungsrichtung ist der Prozess mit der groessten Wartezeit ganz links
+  bzw rechts. im Baum, weil Rot-Schwarz-Baeume zu den binaeren Suchbaeumen
+  gehoeren. Im Worst-Case dauert es also Hoehe h Schritte bis zu diesem Prozess.
+  Man kann beweisen, dass die Hoehe h eines RSB mit n Elementen (Prozessen hier)
+  h <= log2(n + 1) ist. Wir haben also eine Komplexitaet von O(log(n)). Der Prozess
+  wird geloescht, die Zeit aktualisiert und dann falls der Prozess nicht fertig
+  ist wieder eingefuegt. Auch beim einfuegen muss man im Worst-Case bis zum
+  unteren Ende des Baumes und deswegen auch h Schritte benoetigen. D.h. die
+  gesamte Komplexitaet liegt bei O(log(n)).
+
+  Mit sched_min_granularity_ns gibt man in Nanosekunden die minimale Granulari
+  taet an und das hat zu Folge, dass ein Prozess mindestens so lange laeuft.
+
+  Mit sched_latency_ns gibt man in Nanosekunden das Zeitintervall an in dem
+  alle Prozesse einmal gescheduled wurden.
+
+  Mit sched_wakeup_granularity_ns gibt man in Nanosekunden an, ab wann
+  ein Prozess aufgeweckt werden kann um den aktuellen Prozess abzuloesen.
+  Niedrige Werte bewirken, dass Prozesse schneller gewechselt werden.
+
+  Mit diesen Parametern kann man u.a. den Scheduler auf Desktop oder Serversysteme
+  optimieren.
+
+
   2. Aufgabe
 
   Bei einem Desktoprechner gibt es in der Regel einen Benutzer, der viele
