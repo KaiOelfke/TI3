@@ -55,7 +55,7 @@
   3. Realtime Scheduler
 
   Realtimesysteme haben die Anforderung Operationen in einem gegebenen 
-  Zeitrahmen stets abzuschließen. Es muss also garantiert werden, dass
+  Zeitrahmen stets abzuschliessen. Es muss also garantiert werden, dass
   definierte Deadlines eingehalten werden, weil sonst ein Systemfehler
   (hard realtime system) bzw. andere Nachteile (soft realtime system)
   auftreten. D.h. der scheduling Algorithmus muss garantieren,
@@ -85,7 +85,7 @@ LINK spn(LINK head,LINK current,int tStep);
 implementieren.
 
 TIPP:Machen Sie sich zunaechst mit dem Programmablauf vertraut und
-implementieren Sie die Methoden anschließend.
+implementieren Sie die Methoden anschliessend.
 */
 
 #define PMAX 4 //Anzahl der Prozesse
@@ -110,7 +110,7 @@ typedef PROCESS *LINK;
 
 double g_stats[2]={0,0};//Globale Variable zum Aufzeichnen der Wartezeiten
 
-//Methode zur Ausgabe der Wartezeiten nach dem Ausführen des Algorithmus
+//Methode zur Ausgabe der Wartezeiten nach dem Ausfuehren des Algorithmus
 void printStats()
 {
  printf("\n=============================================\n");
@@ -214,7 +214,7 @@ void addProcess(LINK head,int serviceTime,int tStep,int pId)
 //Loeschen des angegebenen Knotens
 LINK deleteProcess(LINK current)
 {
- //Update der Stats für diesen Knoten 
+ //Update der Stats fuer diesen Knoten 
  updateStats(current);
  
  //naechsten Knoten zwischenspeichern     
