@@ -11,16 +11,14 @@ int main(int argc, char *argv[])
 	FILE* file = NULL;
 	if (argc == 2)
 		file = fopen(argv[1],"r");
+    else
+        file = stdin;
 	int words = 0;
 	int lines = 0;
 	int bytes = 0;
-	if (file || argc == 1)
+	if (file != NULL)
 	{
-		int c;
-		if (argc == 2)
-			c = fgetc(file);
-		else 
-			c = getchar();
+		int c = fgetc(file);
 		int prevC = 32;
 		while (c != EOF)
 		{
@@ -30,10 +28,7 @@ int main(int argc, char *argv[])
 			if (c == '\n')
 				lines++;
 			prevC = c;
-			if (argc == 2)
-				c = fgetc(file);
-			else 
-				c = getchar();
+			c = fgetc(file);
 		}
 		if (!((prevC > 8 && prevC < 14) || prevC == 32))
 			words++; 

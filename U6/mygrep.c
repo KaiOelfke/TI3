@@ -1,6 +1,16 @@
 #include <stdio.h>
 #define BUFFER_SIZE (10)
 
+
+int strlength(char *str)
+{
+	int length = 0;
+	while (str[length] != '\0')
+		length++;
+	return length;
+}
+
+
 int main(int argc, char *argv[])
 {
 	if (argc != 3 && argc != 2)
@@ -11,26 +21,21 @@ int main(int argc, char *argv[])
 	FILE* file = NULL;
 	if (argc == 3)
 		file = fopen(argv[2],"r");
+	else
+		file = stdin;
 	FILE* tempFile = fopen(".tempgrepfile", "w+");
 	FILE* outputFile = fopen(".tempgrepoutputfile", "w+");
 	char *filter = argv[1];
-	int filterLength = 0;
-	while (filter[filterLength] != '\0')
-		filterLength++;
-	if ((file != NULL || argc == 2) && tempFile != NULL)
+	int filterLength = strlength(filter);
+	if (file != NULL && tempFile != NULL)
 	{
 		char tbuffer[BUFFER_SIZE];
 		char* buffer = tbuffer;
 		char contains = 0;
-		if (argc == 3)
-			buffer = fgets(buffer, BUFFER_SIZE, file);
-		else 
-			buffer = fgets(buffer, BUFFER_SIZE, stdin);
+		buffer = fgets(buffer, BUFFER_SIZE, file);
 		while (buffer != NULL)
 		{
-			int bufferLength = 0;
-			while (buffer[bufferLength] != '\0')
-				bufferLength++;
+			int bufferLength = strlength(buffer);
 			bufferLength++;
 			if (contains == 0)
 			{
@@ -75,15 +80,11 @@ int main(int argc, char *argv[])
 		fclose(tempFile);
 		remove(".tempgrepfile");
 		if (file) fclose(file);
-		fpurge(stdin);
-		fpurge(stdout);
 		char outputBuffer[BUFFER_SIZE];
 		rewind(outputFile);
 		while (fgets(outputBuffer, BUFFER_SIZE, outputFile) != NULL)
 			printf("%s",outputBuffer);
-		int outputBufferLength = 0;
-		while (outputBuffer[outputBufferLength] != '\0')
-			outputBufferLength++;
+		int outputBufferLength = strlength(outputBuffer);
 		if (outputBuffer[outputBufferLength - 1] != '\n')
 			putchar('\n');
 		fclose(outputFile);
