@@ -1,3 +1,28 @@
+/*
+
+	-- Aufgabe 1
+
+		Zwei Protokolle sind beteiligt. 
+			- Das erste Protokoll ist DNS:
+				DNS-Protokoll kümmert sich darum, dass die Domain zur IP-Adresse
+				umgewendelt wird.
+				z.B:
+					www.fu-berlin.de -> 160.45.170.10
+				DNS Protokoll basiert auf UDP.
+
+			- Das zweite Protokoll ist Http:
+
+				Http-Protokoll ist eine Anwendung für TCP-Protokoll.
+				Die Kommunikationseinheiten in HTTP zwischen Bernutzer und Server werden 
+				als Nachrichten bezeichnet.
+				die Nachrichten  besteht auf zwei Teile. Der erste Teil ist Kopf "Header".
+				in dem alle Informationen über die übergetragene Daten gespeichert wird.
+				z.B ob die Daten ein Html-Text oder ein Media "Video" sind.
+				Der zweite Teil ist die Daten. Die Daten werden zu Segmente zerlegt. 
+				und dann mit TCP Protokoll zu dem Benutzer geschickt wird.
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
