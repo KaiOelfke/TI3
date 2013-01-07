@@ -18,6 +18,11 @@ int main(int argc, char *argv[])
 	//Wir wollen Unix Domain Sockets
 	serverAddress.sun_family = AF_UNIX;
 	//Pfad fuer den Socket aus Aufruf sun = socket unix != Sonne
+	if (argc != 2)
+	{
+		perror("Keine Adresse angegeben.")
+		exit(0);
+	}
 	strcpy(serverAddress.sun_path, argv[1]);
 	//Ermittle Laenge der Serveradresse fuer connect()
 	serverAddressLength = strlen(serverAddress.sun_path) + sizeof(serverAddress.sun_family);

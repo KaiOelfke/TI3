@@ -16,7 +16,11 @@ int main(int argc, char *argv[])
 	struct sockaddr_un clientAddress;
 	socklen_t clientLength;
 	char buffer[80];
-
+	if (argc != 2)
+	{
+		perror("Keine Adresse angegeben.")
+		exit(0);
+	}
 	if ((socketFileDescriptor = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
 	{
 		perror("Socket konnte nicht erstellt werden.");
