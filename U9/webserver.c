@@ -1,9 +1,48 @@
+/*
+   1. Aufgabe: Begriffe
+      Beschreiben Sie jeden der folgenden Begriffe durch maximal zwei Sätze:
+      Bit, Signal, Frequenzmodulation, Framing, Fehlererkennung
+
+      Bit:
+      Ein Bit ist eine theoretische Einheit mit zwei moeglichen Zustaenden (1 und 0),
+      welche durch verschiedene Systeme mit zwei unterscheidbaren Zustaenden implementiert werden kann.
+
+	  Signal:
+	  Ein Signal ist ein Zeichen bzw. eine Zeichenkette übertragen durch ein Übertragungsmedium wie ein Kabel und symbolisiert meistens
+	  eine gewisse Nachricht (z.B. ein Bit oder Byte) je nach Einsatzort.
+
+	  Frequenzmodulation:
+	  Bei der Frequenzmodulation wird die Frequenz des Signals verändert. Mit Hilfe der Frequenzmodulation kann man Daten übertragen,
+	  indem man zum Beispiel festlegt, dass eine niedrige Frequenz 0 und eine hohe 1 bedeutet.
+
+	  Framing: 
+	  Das Signal wird unterteilt in Frames (= Pakete). Wobei das Problem ist das Ende und
+	  den Anfang von jedem Frame zu finden.
+
+	  Fehlererkennung:
+	  Fehlererkennung ist ein Verfahren wie CRC um die ungültige Pakete whärend der Übertragung zu erkennen.
+	
+
+
+	2. Aufgabe: Datenrate
+	  Ein Kanal habe eine Bandbreite von 2 MHz. Wie viele Bit/s können gesendet werden,
+	  wenn digitale Signale mit 6 Levels verwendet werden (nehmen sie einen rauschlosen Kanal an)?
+
+ 	  die Formel von Nyquist formula:
+	  Daterate = 2H log2 V 
+	  V = 4 , 2^(abgerundet(log2 6))
+	  H = 2 MHz
+	  Die Daterate = (2 * (2000) * 1000 * log2 (4)) / 1000 / 1000 
+	  Die Daterate = 8 Mbitps
+
+*/
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include <netinet/in.h>
 #include <sys/select.h>
 #include <strings.h>
@@ -161,9 +200,9 @@ void loop(int serverSocket)
 		sockets[i] = -1;
 	while (1)
 	{
-		struct fd_set readableSocketsSetCopy;
+		fd_set readableSocketsSetCopy;
 		FD_ZERO(&readableSocketsSetCopy);
-		FD_COPY(&readableSocketsSet, &readableSocketsSetCopy);
+		readableSocketsSetCopy = readableSocketsSet;
 		if (select(max + 1, &readableSocketsSetCopy, NULL, NULL, NULL) < 0)
 			error("Fehler bei select():");
 		if (FD_ISSET(serverSocket, &readableSocketsSetCopy))
